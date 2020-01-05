@@ -26,7 +26,7 @@ def url_check(form, field):
             raise ValidationError('Invalid URL')
 
 class PostCreationForm(FlaskForm):
-    title = StringField('Post Title', validators = [DataRequired(), Length(min = 3, max = 50)])
+    title = StringField('Post Title', validators = [DataRequired(), Length(min = 3, max = 75)])
     price = FloatField('Price (£)', validators = [DataRequired(), NumberRange(min = 0)])
     # need to add price (and price reccomendation)
     email = StringField('Contact Email', validators = [DataRequired(), Email()])
