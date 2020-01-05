@@ -1,25 +1,12 @@
 import flask
-import pymongo
-from pprint import pprint
-from forms import PostCreationForm, ItemForm
-from database import upload_post, get_posts, get_price_reccomendation
-import filters
+from tradingwebsite import app, db
+from tradingwebsite.forms import PostCreationForm, ItemForm
+from tradingwebsite.database import upload_post, get_posts, get_price_reccomendation
+from tradingwebsite import filters
 
-app = flask.Flask(__name__)
-
-app.config['SECRET_KEY'] = 'd214895cc0f65074680c2468af85c90d'
-
-db_connection_string = "mongodb+srv://CatnipMasterRace:XuUrP6Ui5EErAcro@epq-trading-site-q3dcn.gcp.mongodb.net/test?retryWrites=true&w=majority"
-client = pymongo.MongoClient(db_connection_string)
-db = client.epq_trading_site
 posts = db.posts
 components = db.components
 component_dict = components.find_one()
-
-#p = get_posts(posts, search="a")
-#print(p, "\n Done printing")
-# serverStatusResult = db.command("serverStatus")
-# pprint(serverStatusResult)
 
 data = ["Heading 1", "Heading 2", "Heading 3"] # will eventually be changed
 @app.route("/")
@@ -34,9 +21,11 @@ def about():
 
 @app.route("/set-category", methods= ['GET', 'POST'])
 def set_category():
+    
     category_form = filters.CategoryForm()
     if category_form.validate_on_submit():
         category = category_form.category.data
+        flask.session.clear()
         if category == "Other":
             flask.session["item id"] = component_dict["other"]["id"]
             return flask.redirect(flask.url_for('create_post'))
@@ -61,6 +50,7 @@ def set_category():
 @app.route("/set-cpus", methods = ["GET", "POST"])
 def set_cpus():
     options = []
+    flask.session["options"] = options
     cpu_form = filters.CPUForm()
     if cpu_form.validate_on_submit():
         brand = cpu_form.brand.data
@@ -190,9 +180,6 @@ def create_post():
         flask.flash(f'Post: {form.title.data} submitted ', 'success')
         return flask.redirect(flask.url_for('home'))
     return flask.render_template('create-post.html', title = 'Create Post', form = form, price_reccomendation = price_reccomendation, price_reccomendation_error = price_reccomendation_error)
-
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
 
 #attempted to do post creation with multiple forms on one page where each form was reliant on previous form 
 #but didnt work as previous forms would be reset when submitting later forms making it impossible to validate the form that i want to validate

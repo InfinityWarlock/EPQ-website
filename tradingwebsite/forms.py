@@ -3,9 +3,6 @@ from wtforms import StringField, TextAreaField, SelectField, ValidationError, Su
 from wtforms.validators import DataRequired, Length, Email, NumberRange, URL, NumberRange
 import postcodes_io_api
 import re
-import filters
-
-
 
 api = postcodes_io_api.Api(debug_http=True)
 

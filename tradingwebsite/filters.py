@@ -1,10 +1,7 @@
-import pymongo
+from tradingwebsite import db
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectMultipleField, SelectField, SubmitField
 
-db_connection_string = "mongodb+srv://CatnipMasterRace:XuUrP6Ui5EErAcro@epq-trading-site-q3dcn.gcp.mongodb.net/test?retryWrites=true&w=majority"
-client = pymongo.MongoClient(db_connection_string)
-db = client.epq_trading_site
 components = db.components
 component_dict = components.find_one()
 
