@@ -1,6 +1,24 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div class="container">
+    <br>
+    <div class="container border border-info rounded">
+        <legend class="border-bottom mb-4">Price Reccomendation</legend>
+        <p class="text-justify">
+            {%if price_reccomendation%}
+                {{price_reccomendation}}
+            {%elif price_reccomendation_error%}
+                {{price_reccomendation_error}}.
+            {%else%}
+                Cant reccomend prices for parts of this type.
+            {%endif%}
+        </p>
+        {%if price_reccomendation%}
+            <small class="text-muted">Note: Price reccomendations are not always accurate and dont have to be followed</small>
+        {%endif%}
+    </div>
+    <br>
+    <div class="container border border-info rounded">
+        
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
@@ -19,16 +37,16 @@
                     {% endif %}
                 </div>
                 <div class="form-group">
-                    {{ form.item.label(class="form-control-label") }}
-                    {% if form.item.errors %}
-                        {{ form.item(class="form-control form-control-lg is-invalid") }}
+                    {{ form.price.label(class="form-control-label") }}
+                    {% if form.price.errors %}
+                        {{ form.price(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in form.item.errors %}
+                            {% for error in form.price.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.item(class="form-control form-control-lg") }}
+                        {{ form.price(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
                 <div class="form-group">
@@ -102,4 +120,5 @@
             </div>
         </form>
     </div>
+    <br>
 {% endblock content %}

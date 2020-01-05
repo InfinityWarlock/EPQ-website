@@ -40,7 +40,7 @@ def get_videocards():
     for gpu in gpu_data:
         chipset = gpu.chipset
         if "TITAN" in chipset or "Titan" in chipset or "Quadro" in chipset or "NVS" in chipset or "GeForce" in chipset:
-            brand = "nVidia"
+            brand = "Nvidia"
         else:
             brand = "ATI/AMD"
         name = brand + " " + chipset

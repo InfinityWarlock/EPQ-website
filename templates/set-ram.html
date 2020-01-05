@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+    <br>
+    <div class="container border border-info rounded">
+        <form method = "POST" action = "">
+            {{ram_form.hidden_tag()}}
+            <fieldset class = "form-group">
+                <legend class="border-bottom mb-4">Memory Filters</legend>
+                <div class = "form-group">
+                    {{ram_form.module_type.label(class="form-control-label")}}
+                    {{ram_form.module_type(class="form-control form-control-lg")}}
+                </div>
+                <div class = "form-group">
+                    {{ram_form.form_factor.label(class="form-control-label")}}
+                    {{ram_form.form_factor(class="form-control form-control-lg")}}
+                </div>
+                <div class = "form-group">
+                    {{ram_form.speed.label(class="form-control-label")}}
+                    {{ram_form.speed(class="form-control form-control-lg")}}
+                </div>
+                <div class = "form-group">
+                    {{ram_form.size.label(class="form-control-label")}}
+                    {{ram_form.size(class="form-control form-control-lg")}}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ram_form.submit(class="btn btn-outline-info")}}
+            </div>
+        </form>
+    </div>
+{% endblock content %}

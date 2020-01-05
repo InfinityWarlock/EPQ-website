@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+    <br>
+    <div class="container border border-info rounded">
+        <form method = "POST" action = "">
+            {{storage_form.hidden_tag()}}
+            <fieldset class = "form-group">
+                <legend class="border-bottom mb-4">Storage Filters</legend>
+                <div class = "form-group">
+                    {{storage_form.drive_type.label(class="form-control-label")}}
+                    {{storage_form.drive_type(class="form-control form-control-lg")}}
+                </div>
+                <div class = "form-group">
+                    {{storage_form.form_factor.label(class="form-control-label")}}
+                    {{storage_form.form_factor(class="form-control form-control-lg")}}
+                </div>
+                <div class = "form-group">
+                    {{storage_form.interface.label(class="form-control-label")}}
+                    {{storage_form.interface(class="form-control form-control-lg")}}
+                </div>
+                <div class = "form-group">
+                    {{storage_form.size.label(class="form-control-label")}}
+                    {{storage_form.size(class="form-control form-control-lg")}}
+                </div>
+                <div class = "form-group">
+                    {{storage_form.rpm.label(class="form-control-label")}}
+                    {{storage_form.rpm(class="form-control form-control-lg")}}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{storage_form.submit(class="btn btn-outline-info")}}
+            </div>
+        </form>
+    </div>
+{% endblock content %}
