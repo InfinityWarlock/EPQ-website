@@ -19,6 +19,42 @@ def home():
 def about():
     return flask.render_template("about.html", title = "About")
 
+@app.route("/browse-posts")
+def browse_posts():
+    pass
+
+@app.route("/browse-posts/cpus")
+def cpus():
+    pass
+
+@app.route("/browse-posts/video-cards")
+def video_cards():
+    pass
+
+@app.route("/browse-posts/cases")
+def cases():
+    pass
+
+@app.route("/browse-posts/motherboards")
+def motherboards():
+    pass
+
+@app.route("/browse-posts/memory")
+def memory():
+    pass
+
+@app.route("/browse-posts/storage")
+def storage():
+    pass
+
+@app.route("/browse-posts/power-supplies")
+def power_supplies():
+    pass
+
+@app.route("/browse-posts/other")
+def other():
+    pass
+
 @app.route("/set-category", methods= ['GET', 'POST'])
 def set_category():
     

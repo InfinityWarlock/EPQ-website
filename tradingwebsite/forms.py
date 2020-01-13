@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SelectField, ValidationError, SubmitField, IntegerField, FloatField
-from wtforms.validators import DataRequired, Length, Email, NumberRange, URL, NumberRange
+from wtforms.validators import DataRequired, Length, Email, NumberRange, URL
 import postcodes_io_api
 import re
 
