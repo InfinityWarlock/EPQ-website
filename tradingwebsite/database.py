@@ -1,4 +1,6 @@
 import time
+from geopy.distance import geodesic
+import geocoder
 
 POST_EXPIRE_TIME = 2592000 #30 days in seconds
 INVALID_TIME = 172800 #2 days in seconds
@@ -25,7 +27,6 @@ def get_posts(db, ids = None, search = None, condition = None, allow_expired = F
     final_posts = []
     update_posts(db)
     if search:
-        search = search
         if allow_expired:
             title_query = {"title": {"$regex": search}}
             description_query = {"description": {"$regex": search}}
@@ -93,3 +94,68 @@ def get_price_reccomendation(db, part_id):
             sum_of_weights += weight
     weighted_average = weighted_sum/sum_of_weights
     return weighted_average
+
+def get_distance(a, b): #a and b are 2 different postcodes (these will be verified already)
+    alatlng = geocoder.google(a).latlng
+    blatlng = geocoder.google(b).latlng
+    distance = geodesic(alatlng, blatlng).miles
+    return distance
+
+def display_cpus(posts, parts, query = None, sort = None, postcode = None, max_distance = None, conditions = None, brands = None):
+    if query: #if query is passed as a parameter then others wont be empty
+        return []
+    else:
+        ids = []
+        for part in parts["cpus"]:
+            ids.append(part["id"])
+        post_matches = get_posts(posts, ids)
+        post_matches = sorted(post_matches, key = lambda i: i['time created'], reverse = True)
+        return post_matches
+
+def display_posts(posts, parts, category = None, query = None, sort = "t", postcode = None, max_distance = None, conditions = None, filters = None):
+    if query == "":
+        query = None
+    if category:
+        ids = []
+        if postcode: #if postcode is passed as a parameter then others wont be empty
+            for part in parts[category]:
+                id_valid = True
+                for key, value in filters.items():
+                    filter_valid = False
+                    for item in value:
+                        if part[key] == item:
+                            filter_valid = True
+                            break
+                    if filter_valid == False:
+                        id_valid = False
+                        break
+                if id_valid:
+                    ids.append(part["id"])
+            post_matches = []
+            for condition in conditions:
+                condition_matches = get_posts(posts, ids = ids, search = query, condition = condition)
+                for p in condition_matches:
+                    if p not in post_matches and get_distance(p["location"], postcode) <= max_distance: #add distance condition and function here
+                        post_matches.append(p)
+        else:
+            for part in parts[category]:
+                ids.append(part["id"])
+            post_matches = get_posts(posts, ids)
+    else:
+        if postcode:
+            post_matches = []
+            for condition in conditions:
+                condition_matches = get_posts(posts, search = query, condition = condition)
+                for p in condition_matches:
+                    if p not in post_matches and get_distance(p["location"], postcode) <= max_distance: #add distance condition and function here
+                        post_matches.append(p)
+        else:
+            post_matches = get_posts(posts)
+    if sort == "t": #sort by time added
+        post_matches = sorted(post_matches, key = lambda i: i['time created'], reverse = True)
+    elif sort == "p": #sort by price
+        post_matches = sorted(post_matches, key = lambda i: i['price'])
+    elif sort == "d": #sort by distance
+        post_matches = sorted(post_matches, key = lambda i: get_distance(i["location"], postcode)) #will do a similar thing to the above calling a to be created 'get distance' function that compares the postcode on the post to the postcode in params
+    return post_matches
+

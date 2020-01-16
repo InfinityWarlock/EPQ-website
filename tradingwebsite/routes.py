@@ -1,8 +1,9 @@
 import flask
 from tradingwebsite import app, db
 from tradingwebsite.forms import PostCreationForm, ItemForm
-from tradingwebsite.database import upload_post, get_posts, get_price_reccomendation
+from tradingwebsite.database import upload_post, get_posts, get_price_reccomendation, display_cpus, display_posts
 from tradingwebsite import filters
+from tradingwebsite import search
 
 posts = db.posts
 components = db.components
@@ -23,9 +24,21 @@ def about():
 def browse_posts():
     pass
 
-@app.route("/browse-posts/cpus")
+@app.route("/browse-posts/cpus", methods= ['GET', 'POST'])
 def cpus():
-    pass
+    cpu_search_form = search.CPUSearch()
+    if cpu_search_form.validate_on_submit():
+        query = cpu_search_form.query
+        sort = cpu_search_form.sort
+        postcode = cpu_search_form.postcode
+        max_distance = cpu_search_form.max_distance
+        condition = cpu_search_form.condition
+        brand = cpu_search_form.brand
+        filters = {"query": query, "sort": sort, "postcode": postcode, "max distance": max_distance, "condition": condition, "brand": brand}
+        flask.session["cpu filters"] = filters
+        return flask.redirect(flask.url_for("cpus"))
+    displayed_posts = display_posts(posts, component_dict, "cpus")
+    return flask.render_template("cpu_posts.html", title = "CPU Posts", displayed_posts = displayed_posts)
 
 @app.route("/browse-posts/video-cards")
 def video_cards():
