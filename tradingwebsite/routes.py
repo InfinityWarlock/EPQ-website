@@ -36,7 +36,7 @@ def cpus():
         max_distance = cpu_search_form.max_distance
         condition = cpu_search_form.condition
         brand = cpu_search_form.brand
-        filters = json.dumps({"query": query.data, "sort": sort.data, "postcode": postcode.data, "max distance": max_distance.data, "condition": condition.data, "specific": {"brand": brand.data}})
+        filters = json.dumps({"query": query.data, "sort": sort.data, "postcode": postcode.data.replace(" ", "").upper(), "max distance": max_distance.data, "condition": condition.data, "specific": {"brand": brand.data}})
         return flask.redirect(flask.url_for("cpus", filters = filters))
     try:
         filters = json.loads(flask.request.args.get('filters', None))
