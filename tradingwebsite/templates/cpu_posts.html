@@ -1,5 +1,95 @@
 {% extends "layout.html" %}
 {% block content %}
+    <br>
+    <div class="container border border-info rounded">
+        <form method="POST" action="">
+            {{cpu_search_form.hidden_tag()}}
+            <fieldset class = "form-group">
+                <legend class="border-bottom mb-4">Filter results</legend>
+                <div class="form-group">
+                    {{ cpu_search_form.query.label(class="form-control-label") }}
+                    {% if cpu_search_form.query.errors %}
+                        {{ cpu_search_form.query(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in cpu_search_form.query.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ cpu_search_form.query(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ cpu_search_form.sort.label(class="form-control-label") }}
+                    {% if cpu_search_form.sort.errors %}
+                        {{ cpu_search_form.sort(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in cpu_search_form.sort.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ cpu_search_form.sort(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ cpu_search_form.postcode.label(class="form-control-label") }}
+                    {% if cpu_search_form.postcode.errors %}
+                        {{ cpu_search_form.postcode(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in cpu_search_form.postcode.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ cpu_search_form.postcode(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ cpu_search_form.max_distance.label(class="form-control-label") }}
+                    {% if cpu_search_form.max_distance.errors %}
+                        {{ cpu_search_form.max_distance(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in cpu_search_form.max_distance.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ cpu_search_form.max_distance(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ cpu_search_form.condition.label(class="form-control-label") }}
+                    {% if cpu_search_form.condition.errors %}
+                        {{ cpu_search_form.condition(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in cpu_search_form.condition.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ cpu_search_form.condition(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ cpu_search_form.brand.label(class="form-control-label") }}
+                    {% if cpu_search_form.brand.errors %}
+                        {{ cpu_search_form.brand(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in cpu_search_form.brand.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ cpu_search_form.brand(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ cpu_search_form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
     {% for post in displayed_posts %}
         <p>{{post}}</p>
     {%endfor%}

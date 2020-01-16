@@ -25,8 +25,8 @@ def get_options(part_type, filter_type):
     options = []
     items = component_dict[part_type]
     for item in items:
-        if item[filter_type] not in options:
-            options.append(item[filter_type])
+        if (option := item[filter_type]) not in options:
+            options.append(option)
     return options
 
 class PSUForm(FlaskForm):

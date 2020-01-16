@@ -1,6 +1,7 @@
 import time
 from geopy.distance import geodesic
 import geocoder
+from tradingwebsite.search import get_choices
 
 POST_EXPIRE_TIME = 2592000 #30 days in seconds
 INVALID_TIME = 172800 #2 days in seconds
@@ -101,20 +102,21 @@ def get_distance(a, b): #a and b are 2 different postcodes (these will be verifi
     distance = geodesic(alatlng, blatlng).miles
     return distance
 
-def display_cpus(posts, parts, query = None, sort = None, postcode = None, max_distance = None, conditions = None, brands = None):
-    if query: #if query is passed as a parameter then others wont be empty
-        return []
+def display_posts(posts, parts, category = None, query_param = None, sort = "t", postcode = None, max_distance = None, conditions_param = None, filters_param = None):
+    if conditions_param == []:
+        conditions = ["New", "Good", "Slightly Faulty", "Not working at all"]
     else:
-        ids = []
-        for part in parts["cpus"]:
-            ids.append(part["id"])
-        post_matches = get_posts(posts, ids)
-        post_matches = sorted(post_matches, key = lambda i: i['time created'], reverse = True)
-        return post_matches
-
-def display_posts(posts, parts, category = None, query = None, sort = "t", postcode = None, max_distance = None, conditions = None, filters = None):
-    if query == "":
+        conditions = conditions_param
+    if filters_param:
+        filters = filters_param
+        for key, value in filters.items():
+            if value == []:
+                filters[key] = get_choices(category, key)
+        
+    if query_param == "":
         query = None
+    else:
+        query = query_param
     if category:
         ids = []
         if postcode: #if postcode is passed as a parameter then others wont be empty
@@ -135,7 +137,7 @@ def display_posts(posts, parts, category = None, query = None, sort = "t", postc
             for condition in conditions:
                 condition_matches = get_posts(posts, ids = ids, search = query, condition = condition)
                 for p in condition_matches:
-                    if p not in post_matches and get_distance(p["location"], postcode) <= max_distance: #add distance condition and function here
+                    if p not in post_matches and (get_distance(p["location"], postcode) <= max_distance or max_distance == 200): #add distance condition and function here
                         post_matches.append(p)
         else:
             for part in parts[category]:
@@ -147,7 +149,7 @@ def display_posts(posts, parts, category = None, query = None, sort = "t", postc
             for condition in conditions:
                 condition_matches = get_posts(posts, search = query, condition = condition)
                 for p in condition_matches:
-                    if p not in post_matches and get_distance(p["location"], postcode) <= max_distance: #add distance condition and function here
+                    if p not in post_matches and (get_distance(p["location"], postcode) <= max_distance or max_distance == 200): #add distance condition and function here
                         post_matches.append(p)
         else:
             post_matches = get_posts(posts)

@@ -1,7 +1,8 @@
 import flask
+import json
 from tradingwebsite import app, db
 from tradingwebsite.forms import PostCreationForm, ItemForm
-from tradingwebsite.database import upload_post, get_posts, get_price_reccomendation, display_cpus, display_posts
+from tradingwebsite.database import upload_post, get_posts, get_price_reccomendation, display_posts
 from tradingwebsite import filters
 from tradingwebsite import search
 
@@ -20,9 +21,10 @@ def home():
 def about():
     return flask.render_template("about.html", title = "About")
 
-@app.route("/browse-posts")
+@app.route("/browse-posts", methods = ['GET', 'POST'])
 def browse_posts():
-    pass
+    #the following is temporary
+    return "hello"
 
 @app.route("/browse-posts/cpus", methods= ['GET', 'POST'])
 def cpus():
@@ -34,11 +36,14 @@ def cpus():
         max_distance = cpu_search_form.max_distance
         condition = cpu_search_form.condition
         brand = cpu_search_form.brand
-        filters = {"query": query, "sort": sort, "postcode": postcode, "max distance": max_distance, "condition": condition, "brand": brand}
-        flask.session["cpu filters"] = filters
-        return flask.redirect(flask.url_for("cpus"))
-    displayed_posts = display_posts(posts, component_dict, "cpus")
-    return flask.render_template("cpu_posts.html", title = "CPU Posts", displayed_posts = displayed_posts)
+        filters = json.dumps({"query": query.data, "sort": sort.data, "postcode": postcode.data, "max distance": max_distance.data, "condition": condition.data, "specific": {"brand": brand.data}})
+        return flask.redirect(flask.url_for("cpus", filters = filters))
+    try:
+        filters = json.loads(flask.request.args.get('filters', None))
+        displayed_posts = display_posts(posts, component_dict, "cpus", filters["query"], filters["sort"], filters["postcode"], filters["max distance"], filters["condition"], filters["specific"])
+    except:
+        displayed_posts = display_posts(posts, component_dict, "cpus")
+    return flask.render_template("cpu_posts.html", title = "CPU Posts", displayed_posts = displayed_posts, cpu_search_form = cpu_search_form)
 
 @app.route("/browse-posts/video-cards")
 def video_cards():
@@ -70,7 +75,6 @@ def other():
 
 @app.route("/set-category", methods= ['GET', 'POST'])
 def set_category():
-    
     category_form = filters.CategoryForm()
     if category_form.validate_on_submit():
         category = category_form.category.data
