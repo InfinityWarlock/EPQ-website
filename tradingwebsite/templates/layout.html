@@ -9,6 +9,8 @@
         {% else %}
             <title>Trading website</title>
         {% endif %}
+        <script src='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
+        <link href='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
     </head>
     <body>
         {% with messages = get_flashed_messages(with_categories = true) %}

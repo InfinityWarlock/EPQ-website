@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     <br>
+    <script src="/static/scripts/map.js"></script>
     <div class="container border border-info rounded">
         <form method="POST" action="">
             {{cpu_search_form.hidden_tag()}}
@@ -90,7 +91,59 @@
             </div>
         </form>
     </div>
-    {% for post in displayed_posts %}
-        <p>{{post}}</p>
+    {% for i in displayed_posts %}
+        <br>
+        <div class="container border border-info rounded justify">
+            <legend class="border-bottom mb-4">{{i["title"]}}</legend>
+            <div class="row">
+                <div class="col-xl-7">
+                    <div class="accordion" id="postVisuals">
+
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h4 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                        Picture
+                                    </button>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#postVisuals">
+                                <div class="card-body">
+                                    {%if i['picture']%}
+                                        <img src="{{i['picture']}}" class="img-fluid" alt="Image not available, Please try again later">
+                                    {%else%}
+                                        Seller has not provided an image
+                                    {%endif%}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header" id="headingTwo">
+                                <h4 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        Map
+                                    </button>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#postVisuals">
+                                <div class="card-body">
+                                    Map for postcode: {{i["location"]}}
+                                    <div id = "{{i['_id']}}map" style='width: 400px; height: 300px;'></div>
+                                    <script>
+                                        createMap({{i["location"]}}, "{{i['_id']}}map");
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <p>{{i}}</p>
+                </div>
+            </div>
+            
+        </div>
     {%endfor%}
+    <br>
 {% endblock content %}
