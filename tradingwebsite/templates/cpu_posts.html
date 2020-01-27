@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     <br>
-    <script src="/static/scripts/map.js"></script>
+    <script src="/./static/scripts/map.js"></script>
     <div class="container border border-info rounded">
         <form method="POST" action="">
             {{cpu_search_form.hidden_tag()}}
@@ -131,7 +131,7 @@
                                     Map for postcode: {{i["location"]}}
                                     <div id = "{{i['_id']}}map" style='width: 400px; height: 300px;'></div>
                                     <script>
-                                        createMap({{i["location"]}}, "{{i['_id']}}map");
+                                        createMap("{{i["location"]}}", "{{i['_id']}}map");
                                     </script>
                                 </div>
                             </div>
