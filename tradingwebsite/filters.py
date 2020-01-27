@@ -57,3 +57,5 @@ class StorageForm(FlaskForm):
     interface = SelectField("Interface", choices = [(i, i) for i in get_options("storage", "interface")])
     rpm = SelectField("RPM", choices = [(i, i) for i in get_rpm_options()])
     submit = SubmitField("Next")
+
+#test edit
