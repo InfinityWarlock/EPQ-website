@@ -161,3 +161,13 @@ def display_posts(posts, parts, category = None, query_param = None, sort = "t",
         post_matches = sorted(post_matches, key = lambda i: get_distance(i["location"], postcode)) #will do a similar thing to the above calling a to be created 'get distance' function that compares the postcode on the post to the postcode in params
     return post_matches
 
+def get_time_created(time_created):
+    now = time.time()
+    time_since = now - time_created
+    days_since = int(time_since/86400)
+    if days_since == 0:
+        return "less than a day ago"
+    elif days_since == 1:
+        return "yesterday"
+    else:
+        return f"{days_since} days ago"

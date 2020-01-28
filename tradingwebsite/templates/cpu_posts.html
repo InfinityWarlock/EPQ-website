@@ -139,7 +139,12 @@
                     </div>
                 </div>
                 <div class="col">
-                    <p>{{i}}</p>
+                    <p>Post created {{i["readable time"]}}</p>
+                    <p><strong>Price: </strong>£{{"{:.2f}".format(i["price"])}}</p>
+                    <p><strong>Condition: </strong>{{i["condition"]}}</p>
+                    <p><strong>Description/Other Details: </strong>{{i["description"]}}</p>
+                    <p><strong>Contact Email: </strong>{{i["email"]}}</p>
+                    <p><strong>Postcode: </strong>{{i["location"]}}</p>
                 </div>
             </div>
             

@@ -21,7 +21,13 @@ function createMap(postcode, map_id){
         var lnglat = JSON.parse(response).features[0].center;
         var map = new mapboxgl.Map({
             container: map_id,
-            style: 'mapbox://styles/mapbox/streets-v11'
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: lnglat,
+            zoom: 12
         });
+        var point = new mapboxgl.Marker()
+            .setLngLat(lnglat)
+            .addTo(map);
+        
     });
 }

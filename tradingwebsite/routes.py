@@ -2,7 +2,7 @@ import flask
 import json
 from tradingwebsite import app, db
 from tradingwebsite.forms import PostCreationForm, ItemForm
-from tradingwebsite.database import upload_post, get_posts, get_price_reccomendation, display_posts
+from tradingwebsite.database import upload_post, get_posts, get_price_reccomendation, display_posts, get_time_created
 from tradingwebsite import filters
 from tradingwebsite import search
 
@@ -41,8 +41,12 @@ def cpus():
     try:
         filters = json.loads(flask.request.args.get('filters', None))
         displayed_posts = display_posts(posts, component_dict, "cpus", filters["query"], filters["sort"], filters["postcode"], filters["max distance"], filters["condition"], filters["specific"])
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
     except:
         displayed_posts = display_posts(posts, component_dict, "cpus")
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
     return flask.render_template("cpu_posts.html", title = "CPU Posts", displayed_posts = displayed_posts, cpu_search_form = cpu_search_form)
 
 @app.route("/browse-posts/video-cards")
