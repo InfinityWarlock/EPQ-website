@@ -1,5 +1,6 @@
 import time
 from geopy.distance import geodesic
+from geopy.geocoders import Nominatim
 import geocoder
 from tradingwebsite.search import get_choices
 
@@ -97,8 +98,8 @@ def get_price_reccomendation(db, part_id):
     return weighted_average
 
 def get_distance(a, b): #a and b are 2 different postcodes (these will be verified already)
-    alatlng = geocoder.google(a).latlng
-    blatlng = geocoder.google(b).latlng
+    alatlng = geocoder.arcgis(a).latlng
+    blatlng = geocoder.arcgis(b).latlng
     distance = geodesic(alatlng, blatlng).miles
     return distance
 

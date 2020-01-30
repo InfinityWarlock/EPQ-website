@@ -23,7 +23,7 @@ function createMap(postcode, map_id){
             container: map_id,
             style: 'mapbox://styles/mapbox/streets-v11',
             center: lnglat,
-            zoom: 12
+            zoom: 13
         });
         var point = new mapboxgl.Marker()
             .setLngLat(lnglat)
