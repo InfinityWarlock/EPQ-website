@@ -36,3 +36,7 @@ class SearchForm(FlaskForm):
 class CPUSearch(SearchForm):
     brand = SelectMultipleField('CPU Brand', choices = [(i, i) for i in get_choices("cpus", "brand")])
     submit = SubmitField("Search")
+
+class GPUSearch(SearchForm):
+    brand = SelectMultipleField('Graphics Card Brand', choices = [(i, i) for i in get_choices("gpus", "brand")])
+    submit = SubmitField("Search")

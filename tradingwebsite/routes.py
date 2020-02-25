@@ -51,7 +51,26 @@ def cpus():
 
 @app.route("/browse-posts/video-cards")
 def video_cards():
-    pass
+    gpu_search_form = search.GPUSearch()
+    if gpu_search_form.validate_on_submit():
+        query = gpu_search_form.query
+        sort = gpu_search_form.sort
+        postcode = gpu_search_form.postcode
+        max_distance = gpu_search_form.max_distance
+        condition = gpu_search_form.condition
+        brand = gpu_search_form.brand
+        filters = json.dumps({"query": query.data, "sort": sort.data, "postcode": postcode.data.replace(" ", "").upper(), "max distance": max_distance.data, "condition": condition.data, "specific": {"brand": brand.data}})
+        return flask.redirect(flask.url_for("video_cards", filters = filters))
+    try:
+        filters = json.loads(flask.request.args.get('filters', None))
+        displayed_posts = display_posts(posts, component_dict, "gpus", filters["query"], filters["sort"], filters["postcode"], filters["max distance"], filters["condition"], filters["specific"])
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
+    except:
+        displayed_posts = display_posts(posts, component_dict, "gpus")
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
+    return flask.render_template("gpu_posts.html", title = "Graphics Card Posts", displayed_posts = displayed_posts, gpu_search_form = gpu_search_form)
 
 @app.route("/browse-posts/cases")
 def cases():
