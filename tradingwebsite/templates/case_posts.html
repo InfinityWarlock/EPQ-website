@@ -1,0 +1,142 @@
+{% extends "layout.html" %}
+{% block content %}
+    <br>
+    <script src="/./static/scripts/map.js"></script>
+    <div class="container border border-info rounded">
+        <form method="POST" action="">
+            {{case_search_form.hidden_tag()}}
+            <fieldset class = "form-group">
+                <legend class="border-bottom mb-4">Filter results</legend>
+                <div class="form-group">
+                    {{ case_search_form.query.label(class="form-control-label") }}
+                    {% if case_search_form.query.errors %}
+                        {{ case_search_form.query(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in case_search_form.query.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ case_search_form.query(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ case_search_form.sort.label(class="form-control-label") }}
+                    {% if case_search_form.sort.errors %}
+                        {{ case_search_form.sort(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in case_search_form.sort.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ case_search_form.sort(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ case_search_form.postcode.label(class="form-control-label") }}
+                    {% if case_search_form.postcode.errors %}
+                        {{ case_search_form.postcode(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in case_search_form.postcode.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ case_search_form.postcode(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ case_search_form.max_distance.label(class="form-control-label") }}
+                    {% if case_search_form.max_distance.errors %}
+                        {{ case_search_form.max_distance(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in case_search_form.max_distance.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ case_search_form.max_distance(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ case_search_form.condition.label(class="form-control-label") }}
+                    {% if case_search_form.condition.errors %}
+                        {{ case_search_form.condition(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in case_search_form.condition.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ case_search_form.condition(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ case_search_form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+    {% for i in displayed_posts %}
+        <br>
+        <div class="container border border-info rounded justify">
+            <legend class="border-bottom mb-4">{{i["title"]}}</legend>
+            <div class="row">
+                <div class="col-xl-7">
+                    <div class="accordion" id="postVisuals">
+
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h4 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                        Picture
+                                    </button>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#postVisuals">
+                                <div class="card-body">
+                                    {%if i['picture']%}
+                                        <img src="{{i['picture']}}" class="img-fluid" alt="Image not available, Please try again later">
+                                    {%else%}
+                                        Seller has not provided an image
+                                    {%endif%}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header" id="headingTwo">
+                                <h4 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        Map
+                                    </button>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#postVisuals">
+                                <div class="card-body">
+                                    Map for postcode: {{i["location"]}}
+                                    <div id = "{{i['_id']}}map" style='width: 400px; height: 300px;'></div>
+                                    <script>
+                                        createMap("{{i["location"]}}", "{{i['_id']}}map");
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                <div class="col">
+                    <p>Post created {{i["readable time"]}}</p>
+                    <p><strong>Price: </strong>£{{"{:.2f}".format(i["price"])}}</p>
+                    <p><strong>Condition: </strong>{{i["condition"]}}</p>
+                    <p><strong>Description/Other Details: </strong>{{i["description"]}}</p>
+                    <p><strong>Contact Email: </strong>{{i["email"]}}</p>
+                    <p><strong>Postcode: </strong>{{i["location"]}}</p>
+                </div>
+            </div>
+            
+        </div>
+    {%endfor%}
+    <br>
+{% endblock content %}

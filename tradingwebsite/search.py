@@ -40,3 +40,28 @@ class CPUSearch(SearchForm):
 class GPUSearch(SearchForm):
     brand = SelectMultipleField('Graphics Card Brand', choices = [(i, i) for i in get_choices("gpus", "brand")])
     submit = SubmitField("Search")
+
+class RAMSearch(SearchForm):
+    module_type = SelectMultipleField('Module type', choices = [(i, i) for i in get_choices("ram", "type")])
+    speed = SelectMultipleField('Clock Speed', choices = [(i, i) for i in get_choices("ram", "speed")])
+    size = SelectMultipleField('Size', choices = [(i, i) for i in get_choices("ram", "size")])
+    form_factor = SelectMultipleField('Form Factor', choices = [(i, i) for i in get_choices("ram", "form factor")])
+    submit = SubmitField("Search")
+
+class StorageSearch(SearchForm):
+    storage_type = SelectMultipleField('Module type', choices = [(i, i) for i in get_choices("storage", "type")])
+    rpm = SelectMultipleField('RPM', choices = [(i, i) for i in get_choices("storage", "rpm")])
+    size = SelectMultipleField('Size', choices = [(i, i) for i in get_choices("storage", "size")])
+    form_factor = SelectMultipleField('Form Factor', choices = [(i, i) for i in get_choices("storage", "form factor")])
+    interface = SelectMultipleField('Interface', choices = [(i, i) for i in get_choices("storage", "interface")])
+    submit = SubmitField("Search")
+
+class PSUSearch(SearchForm):
+    efficiency = SelectMultipleField('Efficiency', choices = [(i, i) for i in get_choices("psus", "efficiency")])
+    wattage = SelectMultipleField('Wattage', choices = [(i, i) for i in get_choices("psus", "wattage")])
+    modular = SelectMultipleField('Modular', choices = [(i, i) for i in get_choices("psus", "modular")])
+    form_factor = SelectMultipleField('Form Factor', choices = [(i, i) for i in get_choices("psus", "form factor")])
+    submit = SubmitField("Search")
+
+class OtherSearch(SearchForm):
+    submit = SubmitField("Search")

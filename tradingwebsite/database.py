@@ -113,7 +113,6 @@ def display_posts(posts, parts, category = None, query_param = None, sort = "t",
         for key, value in filters.items():
             if value == []:
                 filters[key] = get_choices(category, key)
-        
     if query_param == "":
         query = None
     else:
@@ -141,8 +140,11 @@ def display_posts(posts, parts, category = None, query_param = None, sort = "t",
                     if p not in post_matches and (get_distance(p["location"], postcode) <= max_distance or max_distance == 200): #add distance condition and function here
                         post_matches.append(p)
         else:
-            for part in parts[category]:
-                ids.append(part["id"])
+            try:
+                for part in parts[category]:
+                    ids.append(part["id"])
+            except:
+                ids.append(parts[category]["id"])
             post_matches = get_posts(posts, ids)
     else:
         if postcode:

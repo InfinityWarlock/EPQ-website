@@ -23,12 +23,30 @@ def about():
 
 @app.route("/browse-posts", methods = ['GET', 'POST'])
 def browse_posts():
-    #the following is temporary
-    return "hello"
+    all_search_form = search.OtherSearch()
+    if all_search_form.validate_on_submit():
+        query = all_search_form.query
+        sort = all_search_form.sort
+        postcode = all_search_form.postcode
+        max_distance = all_search_form.max_distance
+        condition = all_search_form.condition
+        filters = json.dumps({"query": query.data, "sort": sort.data, "postcode": postcode.data.replace(" ", "").upper(), "max distance": max_distance.data, "condition": condition.data})
+        return flask.redirect(flask.url_for("browse_posts", filters = filters))
+    try:
+        filters = json.loads(flask.request.args.get('filters', None))
+        displayed_posts = display_posts(posts, component_dict, query_param = filters["query"], sort = filters["sort"], postcode = filters["postcode"], max_distance = filters["max distance"], conditions_param = filters["condition"])
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
+    except:
+        displayed_posts = display_posts(posts, component_dict)
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
+    return flask.render_template("all_posts.html", title = "All Posts", displayed_posts = displayed_posts, all_search_form = all_search_form)
 
 @app.route("/browse-posts/cpus", methods= ['GET', 'POST'])
 def cpus():
     cpu_search_form = search.CPUSearch()
+    cpu_search_form.brand.choices = [(i, i) for i in search.get_choices("cpus", "brand")]
     if cpu_search_form.validate_on_submit():
         query = cpu_search_form.query
         sort = cpu_search_form.sort
@@ -49,9 +67,10 @@ def cpus():
             post["readable time"] = get_time_created(post["time created"])
     return flask.render_template("cpu_posts.html", title = "CPU Posts", displayed_posts = displayed_posts, cpu_search_form = cpu_search_form)
 
-@app.route("/browse-posts/video-cards")
+@app.route("/browse-posts/video-cards", methods= ['GET', 'POST'])
 def video_cards():
     gpu_search_form = search.GPUSearch()
+    gpu_search_form.brand.choices = [(i, i) for i in search.get_choices("gpus", "brand")]
     if gpu_search_form.validate_on_submit():
         query = gpu_search_form.query
         sort = gpu_search_form.sort
@@ -72,29 +91,163 @@ def video_cards():
             post["readable time"] = get_time_created(post["time created"])
     return flask.render_template("gpu_posts.html", title = "Graphics Card Posts", displayed_posts = displayed_posts, gpu_search_form = gpu_search_form)
 
-@app.route("/browse-posts/cases")
+@app.route("/browse-posts/cases", methods= ['GET', 'POST'])
 def cases():
-    pass
+    case_search_form = search.OtherSearch()
+    if case_search_form.validate_on_submit():
+        query = case_search_form.query
+        sort = case_search_form.sort
+        postcode = case_search_form.postcode
+        max_distance = case_search_form.max_distance
+        condition = case_search_form.condition
+        filters = json.dumps({"query": query.data, "sort": sort.data, "postcode": postcode.data.replace(" ", "").upper(), "max distance": max_distance.data, "condition": condition.data})
+        return flask.redirect(flask.url_for("cases", filters = filters))
+    try:
+        filters = json.loads(flask.request.args.get('filters', None))
+        displayed_posts = display_posts(posts, component_dict, "cases", filters["query"], filters["sort"], filters["postcode"], filters["max distance"], filters["condition"])
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
+    except:
+        displayed_posts = display_posts(posts, component_dict, "cases")
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
+    return flask.render_template("case_posts.html", title = "Case Posts", displayed_posts = displayed_posts, case_search_form = case_search_form)
 
-@app.route("/browse-posts/motherboards")
+@app.route("/browse-posts/motherboards", methods= ['GET', 'POST'])
 def motherboards():
-    pass
+    motherboard_search_form = search.OtherSearch()
+    if motherboard_search_form.validate_on_submit():
+        query = motherboard_search_form.query
+        sort = motherboard_search_form.sort
+        postcode = motherboard_search_form.postcode
+        max_distance = motherboard_search_form.max_distance
+        condition = motherboard_search_form.condition
+        filters = json.dumps({"query": query.data, "sort": sort.data, "postcode": postcode.data.replace(" ", "").upper(), "max distance": max_distance.data, "condition": condition.data})
+        return flask.redirect(flask.url_for("motherboards", filters = filters))
+    try:
+        filters = json.loads(flask.request.args.get('filters', None))
+        displayed_posts = display_posts(posts, component_dict, "motherboards", filters["query"], filters["sort"], filters["postcode"], filters["max distance"], filters["condition"])
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
+    except:
+        displayed_posts = display_posts(posts, component_dict, "motherboards")
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
+    return flask.render_template("motherboard_posts.html", title = "Motherboard Posts", displayed_posts = displayed_posts, motherboard_search_form = motherboard_search_form)
 
-@app.route("/browse-posts/memory")
+@app.route("/browse-posts/memory", methods= ['GET', 'POST'])
 def memory():
-    pass
+    ram_search_form = search.RAMSearch()
+    ram_search_form.module_type.choices = [(i, i) for i in search.get_choices("ram", "type")]
+    ram_search_form.speed.choices = [(i, i) for i in search.get_choices("ram", "speed")]
+    ram_search_form.size.choices = [(i, i) for i in search.get_choices("ram", "size")]
+    ram_search_form.form_factor.choices = [(i, i) for i in search.get_choices("ram", "form factor")]
+    if ram_search_form.validate_on_submit():
+        query = ram_search_form.query
+        sort = ram_search_form.sort
+        postcode = ram_search_form.postcode
+        max_distance = ram_search_form.max_distance
+        condition = ram_search_form.condition
+        module_type = ram_search_form.module_type
+        speed = ram_search_form.speed
+        size = ram_search_form.size
+        form_factor = ram_search_form.form_factor
+        filters = json.dumps({"query": query.data, "sort": sort.data, "postcode": postcode.data.replace(" ", "").upper(), "max distance": max_distance.data, "condition": condition.data, "specific": {"type": module_type.data, "speed": speed.data, "size": size.data, "form factor": form_factor.data}})
+        return flask.redirect(flask.url_for("memory", filters = filters))
+    try:
+        filters = json.loads(flask.request.args.get('filters', None))
+        displayed_posts = display_posts(posts, component_dict, "ram", query_param = filters["query"], sort = filters["sort"], postcode = filters["postcode"], max_distance = filters["max distance"], conditions_param = filters["condition"], filters_param = filters["specific"])
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
+    except:
+        displayed_posts = display_posts(posts, component_dict, "ram")
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
+    return flask.render_template("ram_posts.html", title = "Memory Posts", displayed_posts = displayed_posts, ram_search_form = ram_search_form)
 
-@app.route("/browse-posts/storage")
+@app.route("/browse-posts/storage", methods= ['GET', 'POST'])
 def storage():
-    pass
+    storage_search_form = search.StorageSearch()
+    storage_search_form.storage_type.choices = [(i, i) for i in search.get_choices("storage", "type")]
+    storage_search_form.rpm.choices = [(i, i) for i in search.get_choices("storage", "rpm")]
+    storage_search_form.size.choices = [(i, i) for i in search.get_choices("storage", "size")]
+    storage_search_form.form_factor.choices = [(i, i) for i in search.get_choices("storage", "form factor")]
+    storage_search_form.interface.choices = [(i, i) for i in search.get_choices("storage", "interface")]
+    if storage_search_form.validate_on_submit():
+        query = storage_search_form.query
+        sort = storage_search_form.sort
+        postcode = storage_search_form.postcode
+        max_distance = storage_search_form.max_distance
+        condition = storage_search_form.condition
+        storage_type = storage_search_form.storage_type
+        rpm = storage_search_form.rpm
+        size = storage_search_form.size
+        form_factor = storage_search_form.form_factor
+        interface = storage_search_form.interface
+        filters = json.dumps({"query": query.data, "sort": sort.data, "postcode": postcode.data.replace(" ", "").upper(), "max distance": max_distance.data, "condition": condition.data, "specific": {"type": storage_type.data, "rpm": rpm.data, "size": size.data, "form factor": form_factor.data, "interface": interface.data}})
+        return flask.redirect(flask.url_for("storage", filters = filters))
+    try:
+        filters = json.loads(flask.request.args.get('filters', None))
+        displayed_posts = display_posts(posts, component_dict, "storage", query_param = filters["query"], sort = filters["sort"], postcode = filters["postcode"], max_distance = filters["max distance"], conditions_param = filters["condition"], filters_param = filters["specific"])
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
+    except:
+        displayed_posts = display_posts(posts, component_dict, "storage")
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
+    return flask.render_template("storage_posts.html", title = "Storage Posts", displayed_posts = displayed_posts, storage_search_form = storage_search_form)
 
-@app.route("/browse-posts/power-supplies")
+@app.route("/browse-posts/power-supplies", methods= ['GET', 'POST'])
 def power_supplies():
-    pass
+    psu_search_form = search.PSUSearch()
+    psu_search_form.efficiency.choices = [(i, i) for i in search.get_choices("psus", "efficiency")]
+    psu_search_form.form_factor.choices = [(i, i) for i in search.get_choices("psus", "form factor")]
+    psu_search_form.wattage.choices = [(i, i) for i in search.get_choices("psus", "wattage")]
+    psu_search_form.modular.choices = [(i, i) for i in search.get_choices("psus", "modular")]
+    if psu_search_form.validate_on_submit():
+        query = psu_search_form.query
+        sort = psu_search_form.sort
+        postcode = psu_search_form.postcode
+        max_distance = psu_search_form.max_distance
+        condition = psu_search_form.condition
+        efficiency = psu_search_form.efficiency
+        wattage = psu_search_form.wattage
+        modular = psu_search_form.modular
+        form_factor = psu_search_form.form_factor
+        filters = json.dumps({"query": query.data, "sort": sort.data, "postcode": postcode.data.replace(" ", "").upper(), "max distance": max_distance.data, "condition": condition.data, "specific": {"efficiency": efficiency.data, "wattage": wattage.data, "modular": modular.data, "form factor": form_factor.data}})
+        return flask.redirect(flask.url_for("power_supplies", filters = filters))
+    try:
+        filters = json.loads(flask.request.args.get('filters', None))
+        displayed_posts = display_posts(posts, component_dict, "psus", query_param = filters["query"], sort = filters["sort"], postcode = filters["postcode"], max_distance = filters["max distance"], conditions_param = filters["condition"], filters_param = filters["specific"])
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
+    except:
+        displayed_posts = display_posts(posts, component_dict, "psus")
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
+    return flask.render_template("psu_posts.html", title = "Power Supply Posts", displayed_posts = displayed_posts, psu_search_form = psu_search_form)
 
-@app.route("/browse-posts/other")
+@app.route("/browse-posts/other", methods= ['GET', 'POST'])
 def other():
-    pass
+    other_search_form = search.OtherSearch()
+    if other_search_form.validate_on_submit():
+        query = other_search_form.query
+        sort = other_search_form.sort
+        postcode = other_search_form.postcode
+        max_distance = other_search_form.max_distance
+        condition = other_search_form.condition
+        filters = json.dumps({"query": query.data, "sort": sort.data, "postcode": postcode.data.replace(" ", "").upper(), "max distance": max_distance.data, "condition": condition.data})
+        return flask.redirect(flask.url_for("other", filters = filters))
+    try:
+        filters = json.loads(flask.request.args.get('filters', None))
+        displayed_posts = display_posts(posts, component_dict, "other", filters["query"], filters["sort"], filters["postcode"], filters["max distance"], filters["condition"])
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
+    except:
+        displayed_posts = display_posts(posts, component_dict, "other")
+        for post in displayed_posts:
+            post["readable time"] = get_time_created(post["time created"])
+    return flask.render_template("other_posts.html", title = "Other Posts", displayed_posts = displayed_posts, other_search_form = other_search_form)
 
 @app.route("/set-category", methods= ['GET', 'POST'])
 def set_category():
