@@ -9,4 +9,3 @@ pymongo
 regex
 requests
 gunicorn
-fcntl
