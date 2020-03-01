@@ -1,0 +1,10 @@
+dnspython
+flask
+flask-wtf
+geocoder
+geopy
+pcpartpicker
+postcodes-io-api
+pymongo
+regex
+requests
