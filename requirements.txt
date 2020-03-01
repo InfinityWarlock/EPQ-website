@@ -8,3 +8,4 @@ postcodes-io-api
 pymongo
 regex
 requests
+gunicorn
