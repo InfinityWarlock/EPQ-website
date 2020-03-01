@@ -1,1 +1,1 @@
-./run.py
+flask run
