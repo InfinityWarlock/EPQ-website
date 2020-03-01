@@ -10,13 +10,11 @@ posts = db.posts
 components = db.components
 component_dict = components.find_one()
 
-data = ["Heading 1", "Heading 2", "Heading 3"] # will eventually be changed
 @app.route("/")
 @app.route("/home")
 def home():
-    return flask.render_template("home.html", data = data, title = "Home") # Will likely only have to worry about this part of the site when i do the frontend
+    return flask.render_template("home.html", title = "Home")
 
-#same for the about page
 @app.route("/about")
 def about():
     return flask.render_template("about.html", title = "About")

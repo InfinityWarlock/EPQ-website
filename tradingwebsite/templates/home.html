@@ -1,6 +1,38 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% for item in data %}
-        <h1>{{item}}</h1>
-    {% endfor %}
+    <br>
+    <div class="container">
+        <div class="row">
+            <h1 class="mx-auto text-info">TechTrader</h1>
+        </div>
+        <div class="row">
+            <span class="mx-auto"><img src="../static/images/graphics-card.png" style="width:auto; height:120px"/></span>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="row border-left border-right border-info">
+            <div class="col border-right border-left border-info">
+                <a href="browse-posts" style="text-decoration:none">
+                    <div class="m-auto" style="width: 0px">
+                        <h2 class="text-info">Buy</h2>
+                        <br>
+                        <br>
+                        <img class="ml-1" src="../static/images/shoppingcart.png/"/>
+                    </div>
+                </a>
+            </div>
+            <div class="col border-left border-right border-info" style="height: 200px">
+                <a href="set-category" style="text-decoration:none">
+                    <div class="m-auto" style="width: 0px">
+                        <h2 class="text-info">Sell</h2>
+                        <br>
+                        <br>
+                        <img class="ml-1" src="../static/images/pound.png"/>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
