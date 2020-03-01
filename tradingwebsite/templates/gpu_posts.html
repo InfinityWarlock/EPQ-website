@@ -2,7 +2,10 @@
 {% block content %}
     <br>
     <script src="/./static/scripts/map.js"></script>
-    <div class="container border border-info rounded">
+    <div class="row">
+    <div class="col-1"></div>
+    <div class="col-3">
+    <div class="container border border-info rounded row-5">
         <form method="POST" action="">
             {{gpu_search_form.hidden_tag()}}
             <fieldset class = "form-group">
@@ -90,9 +93,14 @@
                 {{ gpu_search_form.submit(class="btn btn-outline-info") }}
             </div>
         </form>
-    </div>
-    {% for i in displayed_posts %}
+        <a href="/browse-posts/video-cards" class="btn btn-outline-info">Clear Filters</a>
         <br>
+        <br>
+    </div>
+    <div class="row"></div>
+    </div>
+    <div class="col">
+    {% for i in displayed_posts %}
         <div class="container border border-info rounded justify">
             <legend class="border-bottom mb-4">{{i["title"]}}</legend>
             <div class="row">
@@ -150,6 +158,9 @@
             </div>
             
         </div>
+        <br>
     {%endfor%}
+    </div>
+    </div>
     <br>
 {% endblock content %}
