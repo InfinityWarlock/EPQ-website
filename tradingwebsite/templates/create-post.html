@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     <br>
+    <h1 class="container">Post Creation</h1>
     <div class="container border border-info rounded">
         <legend class="border-bottom mb-4">Price Reccomendation</legend>
         <p class="text-justify">
@@ -103,6 +104,7 @@
                 </div>
                 <div class="form-group">
                     {{ form.picture.label(class="form-control-label") }}
+                    <small class="text-muted">(optional)</small>
                     {% if form.picture.errors %}
                         {{ form.picture(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
@@ -113,6 +115,7 @@
                     {% else %}
                         {{ form.picture(class="form-control form-control-lg") }}
                     {% endif %}
+                    
                 </div>
             </fieldset>
             <div class="form-group">
